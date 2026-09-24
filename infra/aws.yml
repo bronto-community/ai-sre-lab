@@ -4,14 +4,16 @@ Description: >-
   port 80, driven from GitHub Actions through OIDC + SSM. No SSH, no AWS keys.
 
 Parameters:
-  StorefrontRepo:
+  # GitHub's immutable OIDC subjects carry owner and repo IDs. Read them with
+  #   gh api repos/<owner>/<repo>/actions/oidc/customization/sub
+  StorefrontSubject:
     Type: String
-    Default: ai-sre-lab/storefront
-    Description: Its pushes to main deploy the app.
-  LabRepo:
+    Default: repo:ai-sre-lab@333312067/storefront@1385272641
+    Description: ai-sre-lab/storefront; its pushes to main deploy the app.
+  LabSubject:
     Type: String
-    Default: bronto-community/ai-sre-lab
-    Description: Its workflows run reset/release and ship the harness.
+    Default: repo:bronto-community@300402422/ai-sre-lab@1385261870
+    Description: bronto-community/ai-sre-lab; ships the harness, runs reset/release.
   CreateOIDCProvider:
     Type: String
     Default: "true"
@@ -125,7 +127,7 @@ Resources:
             Condition:
               StringEquals:
                 token.actions.githubusercontent.com:aud: sts.amazonaws.com
-                token.actions.githubusercontent.com:sub: !Sub "repo:${StorefrontRepo}:ref:refs/heads/main"
+                token.actions.githubusercontent.com:sub: !Sub "${StorefrontSubject}:ref:refs/heads/main"
       Policies:
         - PolicyName: run-on-instance
           PolicyDocument:
@@ -158,7 +160,7 @@ Resources:
               StringEquals:
                 token.actions.githubusercontent.com:aud: sts.amazonaws.com
               StringLike:
-                token.actions.githubusercontent.com:sub: !Sub "repo:${LabRepo}:*"
+                token.actions.githubusercontent.com:sub: !Sub "${LabSubject}:*"
       Policies:
         - PolicyName: operate-lab
           PolicyDocument:
