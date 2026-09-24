@@ -637,3 +637,116 @@ last hop (read every commit in the release) is a rule participants can add
 to my.md.
 -->
 
+---
+
+# What we built
+
+<AISREArchSketch variant="lab" :stage="4" class="built-sketch" />
+
+<div class="steps7">
+  <span><b>1</b> loop</span><span><b>2</b> identity</span><span><b>3</b> eyes</span><span><b>4</b> mouth</span>
+  <span><b>5</b> instructions</span><span><b>6</b> model</span><span><b>7</b> code</span>
+</div>
+
+<style>
+.built-sketch { transform: scale(0.82); transform-origin: top center; margin-bottom: -3.5rem; }
+.steps7 { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
+.steps7 span {
+  padding: 0.3rem 0.8rem; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface); font-size: 0.9rem;
+}
+.steps7 b { font-family: 'Geist Mono', monospace; color: var(--sapphire); margin-right: 0.25rem; }
+</style>
+
+<!--
+A model, an identity, telemetry, an output, better instructions, a better
+model, the code. About 80 lines of Python, and most of what mattered was prose.
+-->
+
+---
+
+# Where DIY hits its limits
+
+<div class="lim">
+  <div class="card"><b>Confidently wrong</b><span>A tidy issue with a wrong hypothesis looks exactly like a right one.</span></div>
+  <div class="card"><b>Context runs out</b><span>One large search result and the model can't see anything else.</span></div>
+  <div class="card"><b>Tuning never ends</b><span>Every rule, every model swap: better here, worse somewhere else.</span></div>
+  <div class="card"><b>It only knows what it can reach</b><span>No code, no deploy history, no answer. Every tool is access to manage.</span></div>
+</div>
+
+<style>
+.lim { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.6rem; }
+.card {
+  display: flex; flex-direction: column; gap: 0.35rem;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.2rem;
+}
+.card b { font-size: 1.15rem; }
+.card span { color: var(--ink-dim); line-height: 1.4; }
+</style>
+
+<!--
+Everything we hit today: step 4 filed a confident, wrong issue; step 5 blew
+the context window; steps 5 and 6 showed that instructions and model both
+move the result; step 7 only got further because it could read the code.
+That is what a managed agent takes off your plate, and what it still can't
+see if you don't connect it.
+-->
+
+---
+
+# From here
+
+<div class="next">
+  <div class="row"><span class="k">Run it for real</span>Deploy the same code to AgentCore Runtime: <code>agentcore deploy</code></div>
+  <div class="row"><span class="k">Let alerts ask</span>Point a Bronto monitor's webhook at the agent instead of curl</div>
+  <div class="row"><span class="k">Observe the observer</span>Send the agent's own traces to Bronto: tool calls, tokens, retries</div>
+  <div class="row"><span class="k">Measure it</span>Replay the same incident after every prompt or model change</div>
+  <div class="row"><span class="k">Or buy it</span>AWS DevOps Agent, now that you know what's inside</div>
+</div>
+
+<style>
+.next { display: flex; flex-direction: column; gap: 0.2rem; margin-top: 1.4rem; max-width: 52rem; }
+.row { border-top: 1px solid var(--border); padding: 0.75rem 0; font-size: 1.1rem; }
+.row:last-child { border-bottom: 1px solid var(--border); }
+.k {
+  display: inline-block; min-width: 13rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.75rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em; color: var(--sapphire);
+}
+</style>
+
+<!--
+Observe the observer ties back to the title: once the agent runs in
+production it is one more non-deterministic system to observe.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+<div class="thanks">
+  <div class="thanks-left">
+    <h1 class="thanks-title">Thank you</h1>
+    <div class="thanks-links">
+      <div class="tl">
+        <span class="tl-label">These slides</span>
+        <a class="tl-url" href="https://ote.li/ai-sre-lab" target="_blank" rel="noopener">ote.li/ai-sre-lab</a>
+      </div>
+      <QrCode url="https://ote.li/ai-sre-lab" :size="110" />
+    </div>
+  </div>
+
+  <ThanksBronto>What would <em>your</em> agent get wrong?</ThanksBronto>
+</div>
+
+<style>
+.thanks { display: flex; align-items: center; justify-content: center; gap: 3.5rem; text-align: left; }
+.thanks-title { font-size: 4rem; line-height: 1.05; }
+.thanks-links { display: flex; align-items: center; gap: 1.4rem; margin-top: 1.8rem; }
+.tl { display: flex; flex-direction: column; align-items: flex-start; gap: 0.1rem; }
+.tl-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-dim); }
+.thanks em { font-style: italic; color: var(--sapphire); }
+.thanks .tl-url { white-space: nowrap; }
+</style>
+
