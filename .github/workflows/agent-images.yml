@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        step: [step-1, step-2, step-3]
+        step: [step-1, step-2, step-3, step-4]
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3

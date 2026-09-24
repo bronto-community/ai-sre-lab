@@ -1,4 +1,5 @@
 import os
+import re
 
 from bedrock_agentcore import BedrockAgentCoreApp
 from strands import Agent
@@ -11,10 +12,16 @@ model = BedrockModel(
 app = BedrockAgentCoreApp()
 
 
+def answer(result, reasoning: bool) -> str:
+    """gpt-oss sometimes writes its reasoning into the answer. Drop it unless asked."""
+    text = str(result)
+    return text if reasoning else re.sub(r"(?s)^.*</(reasoning|analysis)>?", "", text).strip()
+
+
 @app.entrypoint
 def invoke(payload: dict) -> dict:
     agent = Agent(model=model)
-    return {"result": str(agent(payload.get("prompt", "Hello!")))}
+    return {"result": answer(agent(payload.get("prompt", "Hello!")), payload.get("reasoning", False))}
 
 
 if __name__ == "__main__":
