@@ -26,6 +26,7 @@ exporters:
     compression: none
     headers:
       x-bronto-api-key: ${env:BRONTO_API_KEY}
+      x-bronto-collection: storefront
 
 service:
   pipelines:
