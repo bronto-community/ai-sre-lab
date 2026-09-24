@@ -665,59 +665,54 @@ model, the code. About 80 lines of Python, and most of what mattered was prose.
 
 ---
 
-# Where DIY hits its limits
+# What's next
 
-<div class="lim">
-  <div class="card"><b>Confidently wrong</b><span>A tidy issue with a wrong hypothesis looks exactly like a right one.</span></div>
-  <div class="card"><b>Context runs out</b><span>One large search result and the model can't see anything else.</span></div>
-  <div class="card"><b>Tuning never ends</b><span>Every rule, every model swap: better here, worse somewhere else.</span></div>
-  <div class="card"><b>It only knows what it can reach</b><span>No code, no deploy history, no answer. Every tool is access to manage.</span></div>
+<div class="lead">You now know what an AI SRE is and how it works. Use that to choose: <b>buy or build</b>.</div>
+
+<div class="bb">
+  <div class="col">
+    <div class="k">Buy</div>
+    <h3>AWS DevOps Agent, or others</h3>
+    <div class="sc-list">
+      <span>Solves much of what we hit today: context limits, tuning, integrations.</span>
+      <span>Still extensible: custom skills, your own tools.</span>
+    </div>
+    <a class="wp-url" href="https://docs.aws.amazon.com/devopsagent/" target="_blank" rel="noopener">docs.aws.amazon.com/devopsagent</a>
+  </div>
+  <div class="col">
+    <div class="k">Build</div>
+    <h3>Take this skeleton further</h3>
+    <div class="sc-list">
+      <span>Let alerts trigger it, not curl.</span>
+      <span>Run it on AgentCore Runtime: <code>agentcore deploy</code></span>
+      <span>Let it watch itself: its own traces, then improve itself.</span>
+      <span>More tools: cluster, cloud APIs, past incidents.</span>
+    </div>
+  </div>
 </div>
 
 <style>
-.lim { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.6rem; }
-.card {
-  display: flex; flex-direction: column; gap: 0.35rem;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.2rem;
-}
-.card b { font-size: 1.15rem; }
-.card span { color: var(--ink-dim); line-height: 1.4; }
-</style>
-
-<!--
-Everything we hit today: step 4 filed a confident, wrong issue; step 5 blew
-the context window; steps 5 and 6 showed that instructions and model both
-move the result; step 7 only got further because it could read the code.
-That is what a managed agent takes off your plate, and what it still can't
-see if you don't connect it.
--->
-
----
-
-# From here
-
-<div class="next">
-  <div class="row"><span class="k">Run it for real</span>Deploy the same code to AgentCore Runtime: <code>agentcore deploy</code></div>
-  <div class="row"><span class="k">Let alerts ask</span>Point a Bronto monitor's webhook at the agent instead of curl</div>
-  <div class="row"><span class="k">Observe the observer</span>Send the agent's own traces to Bronto: tool calls, tokens, retries</div>
-  <div class="row"><span class="k">Measure it</span>Replay the same incident after every prompt or model change</div>
-  <div class="row"><span class="k">Or buy it</span>AWS DevOps Agent, now that you know what's inside</div>
-</div>
-
-<style>
-.next { display: flex; flex-direction: column; gap: 0.2rem; margin-top: 1.4rem; max-width: 52rem; }
-.row { border-top: 1px solid var(--border); padding: 0.75rem 0; font-size: 1.1rem; }
-.row:last-child { border-bottom: 1px solid var(--border); }
-.k {
-  display: inline-block; min-width: 13rem;
+.lead { font-size: 1.25rem; margin: 0.6rem 0 1.6rem; color: var(--ink-dim); }
+.lead b { color: var(--ink); }
+.bb { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.col { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.3rem; }
+.col .k {
   font-family: 'Geist Mono', monospace; font-size: 0.75rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.12em; color: var(--sapphire);
+  text-transform: uppercase; letter-spacing: 0.14em; color: var(--sapphire);
 }
+.col h3 { margin: 0.3rem 0 0.8rem; font-size: 1.3rem; }
+.col .sc-list span { color: var(--ink); font-size: 1rem; line-height: 1.4; }
+.col .wp-url { display: inline-block; margin-top: 1rem; font-size: 0.95rem; }
+.col code { white-space: nowrap; }
 </style>
 
 <!--
-Observe the observer ties back to the title: once the agent runs in
-production it is one more non-deterministic system to observe.
+Buy: most of what hurt today (confidently wrong, context overflow, endless
+tuning, wiring every tool) is what a managed agent takes off your plate. And
+you can still extend it.
+
+Build: this is a skeleton. Alerts as the trigger, AgentCore Runtime instead of
+a laptop, self-monitoring feeding self-improvement, more tools.
 -->
 
 ---
