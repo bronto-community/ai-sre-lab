@@ -11,3 +11,5 @@ storefront/
 demo/.deploy/
 demo/.deploy-state
 demo/.env
+.vercel
+.env*
