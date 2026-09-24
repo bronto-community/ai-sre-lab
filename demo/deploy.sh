@@ -17,7 +17,7 @@ ALL="web checkout payments catalog"
 touch .env .deploy-state
 [ -d .deploy ] || git clone -q "$REPO" .deploy
 git -C .deploy fetch -q --tags --force origin
-PREV=$(sed -n 's/^GIT_COMMIT=//p' .deploy-state)
+PREV=$(cat .last-deployed 2>/dev/null || true)   # written only after a deploy succeeds
 git -C .deploy checkout -q "$SHA"
 
 # Which services does this deploy touch?
@@ -40,4 +40,5 @@ printf 'GIT_COMMIT=%s\nGIT_REPO=ai-sre-lab/storefront\nCHECKOUT_VERSION=%s\n' \
 $COMPOSE up -d --build collector psp
 [ -n "${SERVICES// /}" ] && $COMPOSE up -d --build --no-deps $SERVICES
 $COMPOSE up -d --build loadgen
+echo "$SHA" > .last-deployed
 echo "deployed ${SHA:0:7} (${VERSION:-untagged}) to: ${SERVICES:-nothing changed}"
