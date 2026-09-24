@@ -9,6 +9,11 @@ receivers:
 
 processors:
   batch: {}
+  # service.namespace becomes the Bronto collection: everything lands under "storefront".
+  resource:
+    attributes:
+      - { key: service.namespace, value: storefront, action: upsert }
+      - { key: deployment.environment, value: production, action: upsert }
 
 exporters:
   # `docker compose logs collector` shows a line per batch, as a last resort.
@@ -26,13 +31,13 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch]
+      processors: [resource, batch]
       exporters: [debug, otlphttp/bronto]
     metrics:
       receivers: [otlp]
-      processors: [batch]
+      processors: [resource, batch]
       exporters: [debug, otlphttp/bronto]
     logs:
       receivers: [otlp]
-      processors: [batch]
+      processors: [resource, batch]
       exporters: [debug, otlphttp/bronto]
