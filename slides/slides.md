@@ -419,3 +419,221 @@ docker run --rm -p 8080:8080 --env-file .env \
 Example answers are placeholders until the storefront app runs in the account.
 -->
 
+---
+
+# Step 4 — give it a mouth
+
+<div class="lbl">prompts/report.md</div>
+
+<<< @/agent/step-4/prompts/report.md md
+
+<div class="lbl">agent.py</div>
+
+<<< @/agent/step-4/agent.py#mouth python
+
+<<< @/agent/step-4/agent.py#agent python {5-6}
+
+<style>
+.lbl {
+  margin: 0.7rem 0 0.25rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.7rem; color: var(--ink-dim);
+}
+.lbl:first-of-type { margin-top: 0; }
+.slidev-layout { --slidev-code-font-size: 0.66em; }
+.slidev-layout :deep(pre), .slidev-layout :deep(code), .slidev-layout :deep(.line) { white-space: pre-wrap; overflow-wrap: anywhere; }
+</style>
+
+<!--
+The answer no longer comes back to you: it goes where the on-call team
+already looks. One issue per question, filed by the code, not the model.
+-->
+
+---
+
+# Step 4 — run it
+
+<div class="steps">
+
+<div class="n">1 · Add your GitHub token to <code>.env</code></div>
+
+```ini
+GITHUB_TOKEN=...
+```
+
+<div class="n">2 · Stop step 3 (Ctrl-C), start step 4</div>
+
+```bash
+docker run --rm -p 8080:8080 --env-file .env \
+  -v "$PWD/my.md:/app/prompts/my.md" ghcr.io/bronto-community/ai-sre-agent:step-4
+```
+
+<div class="n">3 · Ask it, then open the issue</div>
+
+<Curl prompt="Anything wrong with checkout?" answer="https://github.com/ai-sre-lab/storefront/issues/..." />
+
+<div class="hint">Read the hypothesis. Is it right? How confident is it?</div>
+
+</div>
+
+<style>
+.steps .n {
+  margin: 0.9rem 0 0.35rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.72rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em; color: var(--sapphire);
+}
+.steps .n:first-child { margin-top: 0.4rem; }
+.steps .n code { font-size: 1em; text-transform: none; }
+.steps p { margin: 0; }
+.steps .hint { margin-top: 0.3rem; font-size: 0.85rem; color: var(--ink-dim); }
+</style>
+
+<!--
+It will often be confidently wrong here: in testing it concluded checkout was
+down because a query returned nothing. That's the point to build on.
+-->
+
+---
+
+# Step 5 — better instructions
+
+<div class="steps">
+
+<div class="n">1 · Teach it how you investigate: add to <code>my.md</code></div>
+
+<<< @/agent/rules.example.md md
+
+<div class="n">2 · Restart step 4 (Ctrl-C, same command), ask again</div>
+
+<Curl prompt="Customers say checkout got slow in the last 30 minutes. What is going on?" answer="https://github.com/ai-sre-lab/storefront/issues/..." />
+
+<div class="hint">Better? Worse? Did it run out of context?</div>
+
+</div>
+
+<style>
+.steps .n {
+  margin: 0.9rem 0 0.35rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.72rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em; color: var(--sapphire);
+}
+.steps .n:first-child { margin-top: 0.4rem; }
+.steps .n code { font-size: 1em; text-transform: none; }
+.steps p { margin: 0; }
+.steps .hint { margin-top: 0.3rem; font-size: 0.85rem; color: var(--ink-dim); }
+</style>
+
+<!--
+Same image, same model, different instructions. The prompt files are read at
+start-up, hence the restart.
+
+It may also fail outright: search results can exceed the model's context
+(gpt-oss: 131k tokens). Keep that for the DIY-limits discussion at the end.
+-->
+
+---
+
+# Step 6 — better model
+
+<div class="steps">
+
+<div class="n">1 · Pick another model in <code>.env</code></div>
+
+```ini
+BEDROCK_MODEL_ID=openai.gpt-oss-20b-1:0
+```
+
+<div class="hint">Any Bedrock model your account can use: Bedrock console → Model catalog.</div>
+
+<div class="n">2 · Restart step 4, ask the same question</div>
+
+<Curl prompt="Customers say checkout got slow in the last 30 minutes. What is going on?" answer="https://github.com/ai-sre-lab/storefront/issues/..." />
+
+<div class="hint">Compare the two issues. What changed with the model alone?</div>
+
+</div>
+
+<style>
+.steps .n {
+  margin: 0.9rem 0 0.35rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.72rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em; color: var(--sapphire);
+}
+.steps .n:first-child { margin-top: 0.4rem; }
+.steps .n code { font-size: 1em; text-transform: none; }
+.steps p { margin: 0; }
+.steps .hint { margin-top: 0.3rem; font-size: 0.85rem; color: var(--ink-dim); }
+</style>
+
+<!--
+Same image, same instructions, different model. Instructions and model are
+configuration, not code.
+-->
+
+---
+
+# Step 7 — give it the code
+
+<div class="lbl">prompts/code.md</div>
+
+<<< @/agent/step-7/prompts/code.md md
+
+<div class="lbl">agent.py</div>
+
+<<< @/agent/step-7/agent.py#code python
+
+<<< @/agent/step-7/agent.py#agent python {4}
+
+<style>
+.lbl {
+  margin: 0.7rem 0 0.25rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.7rem; color: var(--ink-dim);
+}
+.lbl:first-of-type { margin-top: 0; }
+.slidev-layout { --slidev-code-font-size: 0.66em; }
+.slidev-layout :deep(pre), .slidev-layout :deep(code), .slidev-layout :deep(.line) { white-space: pre-wrap; overflow-wrap: anywhere; }
+</style>
+
+<!--
+Step 4 plus one more tool source: GitHub's MCP server, read-only repository
+tools only (files, commits, tags). It can't see the issues it filed earlier.
+-->
+
+---
+
+# Step 7 — run it
+
+<div class="steps">
+
+<div class="n">1 · Stop step 4 (Ctrl-C), start step 7</div>
+
+```bash
+docker run --rm -p 8080:8080 --env-file .env \
+  -v "$PWD/my.md:/app/prompts/my.md" ghcr.io/bronto-community/ai-sre-agent:step-7
+```
+
+<div class="n">2 · Ask again</div>
+
+<Curl prompt="Customers say checkout got slow in the last 30 minutes. What is going on?" answer="https://github.com/ai-sre-lab/storefront/issues/..." />
+
+<div class="hint">Does it find the deploy? Does it open the release and pick the right commit?</div>
+
+</div>
+
+<style>
+.steps .n {
+  margin: 0.9rem 0 0.35rem;
+  font-family: 'Geist Mono', monospace; font-size: 0.72rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em; color: var(--sapphire);
+}
+.steps .n:first-child { margin-top: 0.4rem; }
+.steps .n code { font-size: 1em; text-transform: none; }
+.steps p { margin: 0; }
+.steps .hint { margin-top: 0.3rem; font-size: 0.85rem; color: var(--ink-dim); }
+</style>
+
+<!--
+In testing it found the deploy marker and the commit, but stopped there. The
+last hop (read every commit in the release) is a rule participants can add
+to my.md.
+-->
+

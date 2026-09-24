@@ -1,0 +1,3 @@
+- Slow is broken too: compare latency (p50, p95) before and after, not only errors.
+- Compare against a quiet window earlier the same day.
+- Look for `deploy` spans near the onset: they name the commit that went live.
