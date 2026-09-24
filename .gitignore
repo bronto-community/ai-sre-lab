@@ -4,9 +4,8 @@ dist/
 .env
 .DS_Store
 
-# Generated app repo -- rebuild with ./build-storefront.sh
+# Generated app repo. Its history lives in storefront.bundle (pushed by the reset/release workflow)
 storefront/
-.storefront-shas
 
 # Harness state
 demo/.deploy/
