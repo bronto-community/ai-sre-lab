@@ -39,5 +39,5 @@ jobs:
             tar -xzf /tmp/demo.tgz && chmod +x deploy.sh setup-host.sh && ./setup-host.sh &&
             if [ -s .deploy-state ]; then ./deploy.sh $(sed -n 's/^GIT_COMMIT=//p' .deploy-state) &&
               docker compose --env-file .env --env-file .deploy-state up -d --force-recreate --no-deps collector; fi &&
-            if [ "${{ inputs.recreate }}" = true ]; then docker compose --env-file .env --env-file .deploy-state up -d --no-build; fi
+            if [ "${{ inputs.recreate }}" = true ]; then docker compose --env-file .env --env-file .deploy-state up -d --no-build --force-recreate; fi
         run: .github/scripts/ssm-run.sh "$HOST" "$CMD"
