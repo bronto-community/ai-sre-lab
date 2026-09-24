@@ -13,6 +13,8 @@ x-app: &app
     OTEL_EXPORTER_OTLP_INSECURE: "true"
     GIT_COMMIT: ${GIT_COMMIT:-unknown}
     GIT_REPO: ${GIT_REPO:-storefront}
+    # service.namespace becomes the Bronto collection: everything lands under "storefront".
+    OTEL_RESOURCE_ATTRIBUTES: service.namespace=storefront,deployment.environment=production
   depends_on: [collector]
 
 services:

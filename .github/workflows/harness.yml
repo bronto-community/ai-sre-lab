@@ -7,6 +7,11 @@ on:
     branches: [main]
     paths: ["demo/**", ".github/workflows/harness.yml"]
   workflow_dispatch:
+    inputs:
+      recreate:
+        description: Recreate every service at the deployed commit (after harness config changes)
+        type: boolean
+        default: false
 
 permissions:
   id-token: write
@@ -32,5 +37,6 @@ jobs:
             { grep -v '^BRONTO_API_KEY=' .env || true; echo "BRONTO_API_KEY=${{ secrets.BRONTO_INGEST_KEY }}"; } > .env.new && mv .env.new .env && chmod 600 .env &&
             aws s3 cp s3://${{ vars.HARNESS_BUCKET }}/demo.tgz /tmp/demo.tgz &&
             tar -xzf /tmp/demo.tgz && chmod +x deploy.sh setup-host.sh && ./setup-host.sh &&
-            if [ -s .deploy-state ]; then ./deploy.sh $(sed -n 's/^GIT_COMMIT=//p' .deploy-state); fi
+            if [ -s .deploy-state ]; then ./deploy.sh $(sed -n 's/^GIT_COMMIT=//p' .deploy-state); fi &&
+            if [ "${{ inputs.recreate }}" = true ]; then docker compose --env-file .env --env-file .deploy-state up -d --no-build; fi
         run: .github/scripts/ssm-run.sh "$HOST" "$CMD"
