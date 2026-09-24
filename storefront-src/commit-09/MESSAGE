@@ -1,0 +1,11 @@
+perf(checkout): cap the payments client connection pool
+
+The checkout pods have been creeping up against their memory limit and
+were OOMKilled twice last week. Each idle keepalive connection to
+payments-gateway holds a read buffer, and we allow 20 per pod across 12
+pods -- far more than the gateway needs at our volume.
+
+Dropping to 2 keeps steady-state memory comfortably under the limit.
+Load tested at 5 rps with no change in latency.
+
+Refs: PLAT-4471

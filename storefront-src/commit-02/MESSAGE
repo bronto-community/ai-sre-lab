@@ -1,0 +1,5 @@
+feat(catalog): warn on slow primary lookups
+
+Cache misses fall through to the primary, and we had no visibility into
+how slow those are. Logs a warning past the threshold so we can see it in
+the dashboards.

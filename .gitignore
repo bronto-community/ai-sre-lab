@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.slidev/
+.env
+.DS_Store
+
+# Generated app repo -- rebuild with ./build-storefront.sh
+storefront/
+.storefront-shas
+
+# Harness state
+demo/.deploy/
+demo/.deploy-state
+demo/.env

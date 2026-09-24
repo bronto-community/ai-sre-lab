@@ -1,0 +1,73 @@
+# The Storefront, as operated. The four app services build from a checkout of
+# the storefront repo at a specific commit -- a deploy here is a real deploy of
+# a real commit, which is what makes the investigation honest.
+#
+# Driven by the Makefile. See README.md.
+
+x-app: &app
+  build:
+    context: ./.deploy
+  restart: unless-stopped
+  environment: &appenv
+    OTEL_EXPORTER_OTLP_ENDPOINT: http://collector:4317
+    OTEL_EXPORTER_OTLP_INSECURE: "true"
+    GIT_COMMIT: ${GIT_COMMIT:-unknown}
+    GIT_REPO: ${GIT_REPO:-storefront}
+  depends_on: [collector]
+
+services:
+  collector:
+    image: otel/opentelemetry-collector-contrib:0.148.0
+    command: ["--config=/etc/collector.yaml"]
+    volumes: ["./collector.yaml:/etc/collector.yaml:ro"]
+    environment:
+      TELEMETRY_OTLP_ENDPOINT: ${TELEMETRY_OTLP_ENDPOINT:-}
+      TELEMETRY_OTLP_HEADERS: ${TELEMETRY_OTLP_HEADERS:-}
+
+  web:
+    <<: *app
+    environment:
+      <<: *appenv
+      SERVICE_MODULE: services.web.app
+      SERVICE_NAME: storefront-web
+      SERVICE_VERSION: ${WEB_VERSION:-2.4.0}
+    ports: ["8080:8000"]
+
+  checkout:
+    <<: *app
+    environment:
+      <<: *appenv
+      SERVICE_MODULE: services.checkout.app
+      SERVICE_NAME: checkout-api
+      SERVICE_VERSION: ${CHECKOUT_VERSION:-3.1.0}
+
+  payments:
+    <<: *app
+    environment:
+      <<: *appenv
+      SERVICE_MODULE: services.payments.app
+      SERVICE_NAME: payments-gateway
+      SERVICE_VERSION: "1.9.2"
+
+  catalog:
+    <<: *app
+    environment:
+      <<: *appenv
+      SERVICE_MODULE: services.catalog.app
+      SERVICE_NAME: catalog-api
+      SERVICE_VERSION: "5.0.1"
+
+  psp:
+    build: ./harness
+    restart: unless-stopped
+    environment:
+      PSP_LATENCY_MS: ${PSP_LATENCY_MS:-30}
+
+  loadgen:
+    build: ./harness
+    restart: unless-stopped
+    command: ["python", "/srv/loadgen.py"]
+    environment:
+      CONCURRENCY: ${CONCURRENCY:-20}
+      TARGET_RPS: ${TARGET_RPS:-20}
+    depends_on: [web, checkout, payments, catalog, psp]

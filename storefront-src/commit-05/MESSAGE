@@ -1,0 +1,4 @@
+feat(payments): forward the merchant reference to the PSP
+
+Finance cannot reconcile settlements without it. The PSP accepts it as an
+optional field, so this is safe to ship ahead of their side.

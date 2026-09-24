@@ -1,0 +1,5 @@
+chore: initial import of the storefront services
+
+Monorepo for the four services behind the shop: web, checkout, payments
+and catalog. Each ships from the same image; SERVICE_MODULE selects which
+app the container runs.

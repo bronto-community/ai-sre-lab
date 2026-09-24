@@ -1,0 +1,4 @@
+fix(web): return 503 when checkout is unavailable
+
+We were surfacing a bare 500 to the browser when checkout-api failed,
+which the CDN happily cached. 503 is the honest status and is not cached.

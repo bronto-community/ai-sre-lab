@@ -1,0 +1,41 @@
+"""storefront-web -- the customer-facing entry point."""
+
+import logging
+import os
+
+import httpx
+from fastapi import FastAPI, HTTPException
+
+from services.common import telemetry
+
+app = FastAPI(title="storefront-web")
+telemetry.setup(app)
+log = logging.getLogger("storefront-web")
+
+CHECKOUT_URL = os.environ.get("CHECKOUT_URL", "http://checkout:8000")
+CATALOG_URL = os.environ.get("CATALOG_URL", "http://catalog:8000")
+
+client = httpx.AsyncClient(timeout=5.0)
+
+
+@app.on_event("startup")
+async def startup() -> None:
+    telemetry.announce_release()
+
+
+@app.get("/healthz")
+async def healthz() -> dict:
+    return {"ok": True}
+
+
+@app.get("/browse")
+async def browse() -> dict:
+    r = await client.get(f"{CATALOG_URL}/items")
+    return {"items": r.json()["items"]}
+
+
+@app.post("/checkout")
+async def checkout() -> dict:
+    r = await client.post(f"{CHECKOUT_URL}/checkout", json={"cart": ["sku-1"]})
+    r.raise_for_status()
+    return r.json()

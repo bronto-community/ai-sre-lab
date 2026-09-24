@@ -1,0 +1,4 @@
+test(checkout): cover the declined-payment path
+
+We had no coverage for a declined charge and nearly shipped a regression
+that swallowed the decline reason.

@@ -1,0 +1,6 @@
+feat(checkout): send an idempotency key with every charge
+
+A retried checkout could double-charge the customer. The PSP deduplicates
+on this header, and payments-gateway passes it straight through.
+
+Refs: PLAT-4402

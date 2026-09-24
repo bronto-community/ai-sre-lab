@@ -1,0 +1,3 @@
+chore(deps): bump httpx to 0.28.1
+
+Picks up the connection-reuse fix from 0.28.0. No API changes on our side.

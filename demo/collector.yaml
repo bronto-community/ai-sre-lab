@@ -1,0 +1,40 @@
+# Receives everything from the services and forwards it wherever you point it.
+# Swapping the observability backend is this file and nothing else -- the same
+# claim the lab makes about swapping the telemetry MCP server.
+
+receivers:
+  otlp:
+    protocols:
+      grpc: { endpoint: 0.0.0.0:4317 }
+
+processors:
+  batch: {}
+
+exporters:
+  # Always on: `docker compose logs collector` is your backend of last resort.
+  debug:
+    verbosity: normal
+  # Uncomment, set the two env vars in .env, and add `otlp/backend` to each
+  # pipeline below to ship to a real backend (Bronto, or an AWS OTLP endpoint).
+  # Left commented because the collector validates every exporter it is given,
+  # and an empty endpoint fails startup.
+  #
+  # otlp/backend:
+  #   endpoint: ${env:TELEMETRY_OTLP_ENDPOINT}
+  #   headers:
+  #     authorization: ${env:TELEMETRY_OTLP_HEADERS}
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug]

@@ -1,0 +1,3 @@
+chore(ci): pin the build image to python 3.12
+
+The base image moved to 3.13 under us and broke the wheel cache. Pin it.
