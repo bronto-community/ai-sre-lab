@@ -2,9 +2,11 @@
 
 import logging
 import os
+from pathlib import Path
 
 import httpx
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 
 from services.common import telemetry
 
@@ -43,3 +45,7 @@ async def checkout() -> dict:
         log.error("checkout failed: %s", e)
         raise HTTPException(status_code=503, detail="checkout unavailable") from e
     return r.json()
+
+
+# The shop itself: the page and product images. Mounted last so the API routes win.
+app.mount("/", StaticFiles(directory=Path(__file__).parent / "static", html=True), name="shop")

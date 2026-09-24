@@ -2,9 +2,11 @@
 
 import logging
 import os
+from pathlib import Path
 
 import httpx
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 
 from services.common import telemetry
 
@@ -39,3 +41,7 @@ async def checkout() -> dict:
     r = await client.post(f"{CHECKOUT_URL}/checkout", json={"cart": ["sku-1"]})
     r.raise_for_status()
     return r.json()
+
+
+# The shop itself: the page and product images. Mounted last so the API routes win.
+app.mount("/", StaticFiles(directory=Path(__file__).parent / "static", html=True), name="shop")

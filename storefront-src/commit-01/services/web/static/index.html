@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bronto Shop</title>
+  <style>
+    :root { --bg: #faf8f4; --card: #fff; --ink: #2b2620; --dim: #857b6e; --line: #e7e0d4; --accent: #476bff; --ok: #1b7a55; --bad: #c0392b; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    header { padding: 2.2rem 1.25rem 1rem; max-width: 1100px; margin: 0 auto; }
+    h1 { margin: 0; font: 600 2.2rem/1.1 Georgia, serif; }
+    header p { margin: 0.4rem 0 0; color: var(--dim); }
+    main { max-width: 1100px; margin: 0 auto; padding: 1rem 1.25rem 3rem;
+           display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.25rem; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+    .card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+    .body { padding: 0.9rem 1rem 1rem; display: flex; flex-direction: column; gap: 0.35rem; flex: 1; }
+    .name { font-weight: 650; }
+    .desc { color: var(--dim); font-size: 0.92rem; flex: 1; }
+    .row { display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; }
+    .price { font-weight: 650; }
+    button { border: 0; border-radius: 999px; padding: 0.5rem 1.1rem; background: var(--accent); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+    button:disabled { opacity: 0.6; cursor: wait; }
+    .status { min-height: 1.3em; font-size: 0.88rem; color: var(--dim); }
+    .status.ok { color: var(--ok); }
+    .status.bad { color: var(--bad); }
+    footer { text-align: center; color: var(--dim); font-size: 0.85rem; padding-bottom: 2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bronto Shop</h1>
+    <p>Plush brontosauruses, dressed for every job.</p>
+  </header>
+  <main id="shop"></main>
+  <footer>Free shipping on orders over three brontos.</footer>
+
+  <script>
+    const products = [
+      { img: "classic",     name: "Classic Bronto",     price: 24, desc: "The original. Soft, yellow, ready for your desk." },
+      { img: "pair",        name: "Bronto Pair",        price: 42, desc: "Two brontos who clearly get along." },
+      { img: "professor",   name: "Professor Bronto",   price: 29, desc: "Reads the docs so you don't have to." },
+      { img: "detective",   name: "Detective Bronto",   price: 32, desc: "Finds the root cause. Eventually." },
+      { img: "executive",   name: "Executive Bronto",   price: 34, desc: "Has opinions about your roadmap." },
+      { img: "astronaut",   name: "Astronaut Bronto",   price: 49, desc: "Mission One, fully suited up." },
+      { img: "firefighter", name: "Firefighter Bronto", price: 39, desc: "First on call when production is on fire." },
+    ];
+
+    const shop = document.getElementById("shop");
+    for (const p of products) {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.innerHTML = `
+        <img src="/img/${p.img}.jpg" alt="${p.name}" loading="lazy">
+        <div class="body">
+          <div class="name">${p.name}</div>
+          <div class="desc">${p.desc}</div>
+          <div class="row"><span class="price">€${p.price}</span><button>Buy</button></div>
+          <div class="status"></div>
+        </div>`;
+      const button = card.querySelector("button");
+      const status = card.querySelector(".status");
+      button.addEventListener("click", async () => {
+        button.disabled = true;
+        status.className = "status";
+        status.textContent = "Placing your order…";
+        const started = performance.now();
+        try {
+          const r = await fetch("/checkout", { method: "POST" });
+          const secs = ((performance.now() - started) / 1000).toFixed(2);
+          if (!r.ok) throw new Error(`${r.status}`);
+          status.className = "status ok";
+          status.textContent = `Order confirmed in ${secs}s`;
+        } catch (e) {
+          status.className = "status bad";
+          status.textContent = "Checkout failed, please try again";
+        } finally {
+          button.disabled = false;
+        }
+      });
+      shop.appendChild(card);
+    }
+  </script>
+</body>
+</html>
