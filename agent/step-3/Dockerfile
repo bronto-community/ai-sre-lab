@@ -1,8 +1,3 @@
-FROM python:3.12-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+FROM ghcr.io/bronto-community/ai-sre-agent:base
 COPY agent.py .
 COPY prompts prompts
-EXPOSE 8080
-CMD ["python", "agent.py"]
