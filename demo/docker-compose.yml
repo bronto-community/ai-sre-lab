@@ -60,12 +60,13 @@ services:
     build: ./harness
     restart: unless-stopped
     environment:
-      PSP_LATENCY_MS: ${PSP_LATENCY_MS:-30}
+      PSP_LATENCY_MS: ${PSP_LATENCY_MS:-80}
 
   loadgen:
     build: ./harness
     restart: unless-stopped
     command: ["python", "/srv/loadgen.py"]
     environment:
-      TARGET_RPS: ${TARGET_RPS:-34}
+      CUSTOMERS: ${CUSTOMERS:-20}
+      THINK_S: ${THINK_S:-0.5}
     depends_on: [web, checkout, payments, catalog, psp]

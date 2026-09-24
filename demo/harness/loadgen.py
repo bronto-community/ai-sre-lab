@@ -1,7 +1,8 @@
-"""Steady customer traffic: customers arrive at random, ~TARGET_RPS per second.
+"""Steady customer traffic: CUSTOMERS shoppers, each buying, then pausing.
 
-Arrivals are independent (not batched), so a healthy shop stays flat and any
-capacity limit shows up as a queue that customers actually wait in.
+A fixed population (closed loop) can't overload the shop: when it slows down,
+shoppers wait for their orders and send less. A capacity limit shows up as
+longer orders, not as a collapse.
 """
 
 import asyncio
@@ -12,7 +13,8 @@ import time
 
 import httpx
 
-RPS = float(os.environ.get("TARGET_RPS", "30"))
+CUSTOMERS = int(os.environ.get("CUSTOMERS", "20"))
+THINK_S = float(os.environ.get("THINK_S", "0.5"))
 WEB = os.environ.get("WEB_URL", "http://web:8000")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s loadgen %(levelname)s %(message)s")
@@ -46,16 +48,17 @@ async def report() -> None:
         stats["ok"] = stats["err"] = 0
 
 
+async def shopper(client: httpx.AsyncClient) -> None:
+    while True:
+        await customer(client)
+        await asyncio.sleep(random.expovariate(1 / THINK_S))
+
+
 async def main() -> None:
-    log.info("~%.0f customers per second", RPS)
+    log.info("%d shoppers, ~%.1fs between orders", CUSTOMERS, THINK_S)
     asyncio.create_task(report())
-    inflight: set[asyncio.Task] = set()
-    async with httpx.AsyncClient(timeout=20.0, limits=httpx.Limits(max_connections=500)) as c:
-        while True:
-            task = asyncio.create_task(customer(c))
-            inflight.add(task)
-            task.add_done_callback(inflight.discard)
-            await asyncio.sleep(random.expovariate(RPS))
+    async with httpx.AsyncClient(timeout=20.0, limits=httpx.Limits(max_connections=CUSTOMERS * 2)) as c:
+        await asyncio.gather(*(shopper(c) for _ in range(CUSTOMERS)))
 
 
 if __name__ == "__main__":

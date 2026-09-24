@@ -42,7 +42,7 @@ psp-slow:  ## the third-party processor degrades
 	@PSP_LATENCY_MS=1500 $(COMPOSE) up -d --force-recreate --no-deps psp
 	@echo "The PSP is slow now. Nothing in your telemetry will say so."
 
-psp-ok:
+psp-ok:  ## back to normal (80ms)
 	@$(COMPOSE) up -d --force-recreate --no-deps psp
 
 status:  ## what the customer is experiencing
