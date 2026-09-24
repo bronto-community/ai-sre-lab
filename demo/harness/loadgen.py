@@ -1,4 +1,8 @@
-"""Steady customer traffic. Concurrency is what makes the system interesting."""
+"""Steady customer traffic: customers arrive at random, ~TARGET_RPS per second.
+
+Arrivals are independent (not batched), so a healthy shop stays flat and any
+capacity limit shows up as a queue that customers actually wait in.
+"""
 
 import asyncio
 import logging
@@ -8,8 +12,7 @@ import time
 
 import httpx
 
-CONCURRENCY = int(os.environ.get("CONCURRENCY", "20"))
-RPS = float(os.environ.get("TARGET_RPS", "20"))
+RPS = float(os.environ.get("TARGET_RPS", "30"))
 WEB = os.environ.get("WEB_URL", "http://web:8000")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s loadgen %(levelname)s %(message)s")
@@ -44,12 +47,15 @@ async def report() -> None:
 
 
 async def main() -> None:
-    log.info("%d concurrent customers, ~%.0f rps", CONCURRENCY, RPS)
+    log.info("~%.0f customers per second", RPS)
     asyncio.create_task(report())
-    async with httpx.AsyncClient(timeout=20.0, limits=httpx.Limits(max_connections=CONCURRENCY * 2)) as c:
+    inflight: set[asyncio.Task] = set()
+    async with httpx.AsyncClient(timeout=20.0, limits=httpx.Limits(max_connections=500)) as c:
         while True:
-            await asyncio.gather(*(customer(c) for _ in range(CONCURRENCY)))
-            await asyncio.sleep(max(0.0, CONCURRENCY / RPS - 0.1) * random.uniform(0.8, 1.2))
+            task = asyncio.create_task(customer(c))
+            inflight.add(task)
+            task.add_done_callback(inflight.discard)
+            await asyncio.sleep(random.expovariate(RPS))
 
 
 if __name__ == "__main__":

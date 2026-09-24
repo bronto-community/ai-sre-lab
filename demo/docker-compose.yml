@@ -67,6 +67,5 @@ services:
     restart: unless-stopped
     command: ["python", "/srv/loadgen.py"]
     environment:
-      CONCURRENCY: ${CONCURRENCY:-50}
-      TARGET_RPS: ${TARGET_RPS:-25}
+      TARGET_RPS: ${TARGET_RPS:-30}
     depends_on: [web, checkout, payments, catalog, psp]
