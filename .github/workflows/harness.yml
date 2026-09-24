@@ -1,0 +1,35 @@
+name: harness
+
+# Ship demo/ to the shop host: collector, payment-processor mock, load
+# generator and the deploy script the storefront's workflow calls.
+on:
+  push:
+    branches: [main]
+    paths: ["demo/**", ".github/workflows/harness.yml"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency: lab
+
+jobs:
+  ship:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - run: tar -czf demo.tgz -C demo . && aws s3 cp demo.tgz "s3://${{ vars.HARNESS_BUCKET }}/demo.tgz"
+      - name: Unpack on the host
+        env:
+          HOST: ${{ vars.INSTANCE_ID }}
+          CMD: >-
+            mkdir -p /opt/storefront && cd /opt/storefront &&
+            aws s3 cp s3://${{ vars.HARNESS_BUCKET }}/demo.tgz /tmp/demo.tgz &&
+            tar -xzf /tmp/demo.tgz && chmod +x deploy.sh &&
+            if [ -s .deploy-state ]; then ./deploy.sh $(sed -n 's/^GIT_COMMIT=//p' .deploy-state); fi
+        run: .github/scripts/ssm-run.sh "$HOST" "$CMD"

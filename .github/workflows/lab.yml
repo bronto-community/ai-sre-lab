@@ -1,0 +1,35 @@
+name: lab
+
+# reset:   storefront main -> v3.1.0 (healthy). Its deploy workflow ships it.
+# release: storefront main -> v3.2.0 (the release with the fault).
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        type: choice
+        options: [reset, release]
+        required: true
+
+concurrency: lab
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Push storefront
+        env:
+          KEY: ${{ secrets.STOREFRONT_DEPLOY_KEY }}
+          ACTION: ${{ inputs.action }}
+        run: |
+          source .storefront-shas
+          install -m 600 /dev/null ~/id && echo "$KEY" > ~/id
+          export GIT_SSH_COMMAND="ssh -i ~/id -o StrictHostKeyChecking=accept-new"
+          git clone -q storefront.bundle sf && cd sf
+          git remote add gh git@github.com:ai-sre-lab/storefront.git
+          if [ "$ACTION" = reset ]; then
+            git push --force gh "$GOOD_SHA:refs/heads/main" v3.1.0
+            git push gh :refs/tags/v3.2.0 || true
+          else
+            git push gh "$BAD_SHA:refs/heads/main" v3.2.0
+          fi

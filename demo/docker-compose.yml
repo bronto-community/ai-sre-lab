@@ -31,7 +31,7 @@ services:
       SERVICE_MODULE: services.web.app
       SERVICE_NAME: storefront-web
       SERVICE_VERSION: ${WEB_VERSION:-2.4.0}
-    ports: ["8080:8000"]
+    ports: ["80:8000"]
 
   checkout:
     <<: *app
