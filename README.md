@@ -11,3 +11,8 @@ Build your own AI SRE with AgentCore. Hands-on lab for the AWS + Bronto evening.
 | [`PLAN.md`](PLAN.md) | the steps |
 
 Internal until after the event: it contains the incident.
+
+## License
+
+Content under [CC BY 4.0](LICENSE), code under [MIT](LICENSE-CODE). No trademark
+rights; see [NOTICE](NOTICE).

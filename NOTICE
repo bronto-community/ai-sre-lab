@@ -1,0 +1,24 @@
+# Notices and trademarks
+
+Copyright (c) 2026 Severin Neumann.
+
+Dual-licensed:
+
+- **Content**: the slides and the prose in this repository, under
+  [CC BY 4.0](LICENSE).
+- **Code**: `agent/`, `demo/`, `storefront-src/`, the slide components and the build
+  configuration, under the [MIT License](LICENSE-CODE).
+
+**Neither license grants trademark rights.** Third-party marks appear here only to
+identify the products they name, without implying affiliation or endorsement.
+
+| Mark / asset | Owner |
+| --- | --- |
+| "Bronto", its wordmark, and the Bronto dinosaur illustrations (`slides/public/img/bronto-*`, `dino-*`, `confetti-*`) | Bronto, used with permission |
+| GitHub and the GitHub logo (`slides/public/img/logo-github.svg`) | GitHub, Inc. |
+| Kubernetes and the Kubernetes logo (`slides/public/img/logo-k8s.svg`) | The Linux Foundation |
+| Amazon Web Services, AWS, Amazon Bedrock, AgentCore, and the AWS logo (`slides/public/img/logo-aws.svg`) | Amazon Technologies, Inc. |
+| OpenAI, ChatGPT, gpt-oss | OpenAI |
+
+The dinosaur illustrations are Bronto brand assets and are **not** covered by the
+licenses above.
