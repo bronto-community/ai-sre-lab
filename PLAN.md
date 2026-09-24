@@ -3,11 +3,13 @@
 Attendees follow the lab slides on their own machine and copy commands from them.
 Each step is a prebuilt image: `ghcr.io/bronto-community/ai-sre-agent:step-N`.
 
-1. **Loop** — bare agent in a container, `curl` it. *(built: `agent/step-1`)*
-2. **Identity** — SRE system prompt from `prompts/*.md`. Asked to investigate, it says it has no telemetry. *(built: `agent/step-2`)*
-3. **Bronto MCP** — "what services do you know?", then "anything wrong with X at Y?" *(built: `agent/step-3`)*
-4. **GitHub MCP** — reads the source; same question now names the release.
-5. **Issue** — files a GitHub issue; the reply is a link to it.
+1. **Loop**: bare agent in a container, `curl` it. *(`step-1`)*
+2. **Identity**: SRE prompt from `prompts/*.md`, plus your own `my.md`. Says it has no telemetry. *(`step-2`)*
+3. **Eyes**: Bronto MCP. "What services do you know?", "anything wrong with X at Y?" *(`step-3`)*
+4. **Mouth**: files its hypothesis as a GitHub issue; the reply is the link. May well be wrong. *(`step-4`)*
+5. **Better instructions**: rules in `my.md` (look for slowness, baselines, deploy markers). *(same image)*
+6. **Better model**: a different `BEDROCK_MODEL_ID`. *(same image)*
+7. **Code**: GitHub MCP, read-only repository tools; now it can name the commit. *(`step-7`)*
 
 ## Environment
 

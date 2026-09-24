@@ -22,16 +22,6 @@ bronto = MCPClient(lambda: streamable_http_client(
 ))
 # #endregion
 
-# #region code
-# The code: GitHub's MCP server, read-only repository tools (files, commits, releases).
-github = MCPClient(lambda: streamable_http_client(
-    os.environ.get("GITHUB_MCP_URL", "https://api.githubcopilot.com/mcp/x/repos/readonly"),
-    http_client=httpx2.AsyncClient(
-        headers={"Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}"}, timeout=60,
-    ),
-))
-# #endregion
-
 model = BedrockModel(
     model_id=os.environ.get("BEDROCK_MODEL_ID", "openai.gpt-oss-120b-1:0"),
     region_name=os.environ.get("AWS_REGION", "eu-central-1"),
@@ -50,11 +40,27 @@ def answer(result, reasoning: bool) -> str:
     return text[m.start():].strip() if m else text
 
 
+# #region mouth
+# The mouth: the hypothesis goes where humans already look, as a GitHub issue.
+def file_issue(question: str, hypothesis: str) -> str:
+    r = httpx2.post(
+        f"https://api.github.com/repos/{os.environ.get('GITHUB_REPO', 'ai-sre-lab/storefront')}/issues",
+        headers={"Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}"},
+        json={"title": f"[investigation] {question}"[:120], "body": hypothesis},
+        timeout=30,
+    )
+    r.raise_for_status()
+    return r.json()["html_url"]
+# #endregion
+
+
 # #region agent
 @app.entrypoint
 def invoke(payload: dict) -> dict:
-    agent = Agent(model=model, system_prompt=SYSTEM_PROMPT, tools=[bronto, github])
-    return {"result": answer(agent(payload.get("prompt", "Hello!")), payload.get("reasoning", False))}
+    question = payload.get("prompt", "Hello!")
+    agent = Agent(model=model, system_prompt=SYSTEM_PROMPT, tools=[bronto])
+    hypothesis = answer(agent(question), payload.get("reasoning", False))
+    return {"result": file_issue(question, hypothesis)}
 # #endregion
 
 
