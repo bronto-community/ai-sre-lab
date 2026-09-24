@@ -11,30 +11,28 @@ processors:
   batch: {}
 
 exporters:
-  # Always on: `docker compose logs collector` is your backend of last resort.
+  # `docker compose logs collector` shows a line per batch, as a last resort.
   debug:
-    verbosity: normal
-  # Uncomment, set the two env vars in .env, and add `otlp/backend` to each
-  # pipeline below to ship to a real backend (Bronto, or an AWS OTLP endpoint).
-  # Left commented because the collector validates every exporter it is given,
-  # and an empty endpoint fails startup.
-  #
-  # otlp/backend:
-  #   endpoint: ${env:TELEMETRY_OTLP_ENDPOINT}
-  #   headers:
-  #     authorization: ${env:TELEMETRY_OTLP_HEADERS}
+    verbosity: basic
+  # Bronto EU. The key comes from .env on the host (written by the harness
+  # workflow from a repo secret); it is never in git.
+  otlphttp/bronto:
+    endpoint: https://ingestion.eu.bronto.io
+    compression: none
+    headers:
+      x-bronto-api-key: ${env:BRONTO_API_KEY}
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [debug, otlphttp/bronto]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [debug, otlphttp/bronto]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [debug, otlphttp/bronto]

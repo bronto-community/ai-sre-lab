@@ -21,8 +21,7 @@ services:
     command: ["--config=/etc/collector.yaml"]
     volumes: ["./collector.yaml:/etc/collector.yaml:ro"]
     environment:
-      TELEMETRY_OTLP_ENDPOINT: ${TELEMETRY_OTLP_ENDPOINT:-}
-      TELEMETRY_OTLP_HEADERS: ${TELEMETRY_OTLP_HEADERS:-}
+      BRONTO_API_KEY: ${BRONTO_API_KEY:?set BRONTO_API_KEY in .env}
 
   web:
     <<: *app

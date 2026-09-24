@@ -28,7 +28,8 @@ jobs:
         env:
           HOST: ${{ vars.INSTANCE_ID }}
           CMD: >-
-            mkdir -p /opt/storefront && cd /opt/storefront &&
+            mkdir -p /opt/storefront && cd /opt/storefront && touch .env &&
+            { grep -v '^BRONTO_API_KEY=' .env || true; echo "BRONTO_API_KEY=${{ secrets.BRONTO_INGEST_KEY }}"; } > .env.new && mv .env.new .env && chmod 600 .env &&
             aws s3 cp s3://${{ vars.HARNESS_BUCKET }}/demo.tgz /tmp/demo.tgz &&
             tar -xzf /tmp/demo.tgz && chmod +x deploy.sh setup-host.sh && ./setup-host.sh &&
             if [ -s .deploy-state ]; then ./deploy.sh $(sed -n 's/^GIT_COMMIT=//p' .deploy-state); fi
