@@ -41,8 +41,13 @@ app = BedrockAgentCoreApp()
 
 def answer(result, reasoning: bool) -> str:
     """gpt-oss sometimes writes its reasoning into the answer. Drop it unless asked."""
-    text = str(result)
-    return text if reasoning else re.sub(r"(?s)^.*</(reasoning|analysis)>?", "", text).strip()
+    text = str(result).strip()
+    if reasoning or not text.startswith("<reasoning>"):
+        return text
+    if re.search(r"</(reasoning|analysis)>?", text):  # closed: cut at the last close tag
+        return re.sub(r"(?s)^.*</(reasoning|analysis)>?", "", text).strip()
+    m = re.search(r"(?m)^(\*\*|#|\|)", text)          # unclosed: cut where the answer starts
+    return text[m.start():].strip() if m else text
 
 
 # #region agent
