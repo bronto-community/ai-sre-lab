@@ -9,7 +9,7 @@ receivers:
 
 processors:
   batch: {}
-  # service.namespace becomes the Bronto collection: everything lands under "storefront".
+  # Traces land in Bronto's ".traces" collection; these tag them as ours.
   resource:
     attributes:
       - { key: service.namespace, value: storefront, action: upsert }
@@ -26,7 +26,6 @@ exporters:
     compression: none
     headers:
       x-bronto-api-key: ${env:BRONTO_API_KEY}
-      x-bronto-collection: storefront
 
 service:
   pipelines:
