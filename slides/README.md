@@ -12,6 +12,7 @@ npm run build       # -> dist/, deployed to Vercel
   `vite.config.ts` reloads the deck when those files change.
 - `<Curl>` renders a copyable curl; `<PrettyToggle>` on the setup slide adds
   `| jq -r .result | glow -` to all of them.
-- Lab keys: `GH_TOKEN=… node seal.mjs ../.env.gist` seals `KEY=VALUE` lines into a
-  secret gist and prints the room link (`…/#s=<owner>/<gist>.<key>`). `<EnvBlock>`
-  fills `.env` lines from it. Delete the gist after the event and they go dark.
+- Lab keys: `SEAL_PASSPHRASE=… GH_TOKEN=… node seal.mjs ../.env.gist` seals `KEY=VALUE`
+  lines into the lab's secret gist (address fixed in `components/secrets.ts`). Open the
+  deck with `…/#s=<passphrase>` and `<EnvBlock>` fills the `.env` lines. Delete the gist
+  after the event and they go dark.
