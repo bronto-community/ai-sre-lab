@@ -13,3 +13,4 @@ demo/.deploy-state
 demo/.env
 .vercel
 .env*
+slides/local.json

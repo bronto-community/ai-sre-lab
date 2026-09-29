@@ -193,6 +193,8 @@ and it files a GitHub issue with what it found.
 
 <PrettyToggle class="mt-2" />
 
+<RoomKeys />
+
 </div>
 
 <style>
