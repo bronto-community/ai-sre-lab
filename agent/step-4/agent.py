@@ -65,5 +65,5 @@ def invoke(payload: dict) -> dict:
 
 
 if __name__ == "__main__":
-    print("""Step 4 agent running, try: curl -s localhost:8080/invocations -d '{"prompt": "What services do you know about?"}'""", flush=True)
+    print("""Step 4 agent running, try: curl -s localhost:8080/invocations -d '{"prompt": "Anything wrong with checkout?"}'""", flush=True)
     app.run()  # POST /invocations, GET /ping on :8080
