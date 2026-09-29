@@ -183,15 +183,13 @@ and it files a GitHub issue with what it found.
 - **A terminal**
 - **These slides**, open on your machine: [ote.li/ai-sre-lab](https://ote.li/ai-sre-lab)
 
+<div class="n">Your <code>.env</code>, filled in as you go</div>
+
+<EnvBlock :fixed="{ AWS_REGION: '<region of your Bedrock key>', AWS_BEARER_TOKEN_BEDROCK: '<your Bedrock key, step 1>', BEDROCK_MODEL_ID: 'openai.gpt-oss-120b-1:0' }" :names="['BRONTO_API_KEY', 'GITHUB_TOKEN']" />
+
 <div class="n">Optional: nicer output</div>
 
-```bash
-brew install jq glow        # or your package manager
-```
-
-<PrettyToggle class="mt-4" />
-
-<div class="mt-4"><KeysStatus /></div>
+<div class="opt"><code>brew install jq glow</code> <span>(or your package manager), then</span> <PrettyToggle /></div>
 
 </div>
 
@@ -203,6 +201,9 @@ brew install jq glow        # or your package manager
 }
 .steps .n:first-child { margin-top: 0.4rem; }
 .steps li { font-size: 1.05rem; }
+.steps .n code { font-size: 1em; text-transform: none; }
+.opt { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.opt span { color: var(--ink-dim); }
 </style>
 
 <!--
