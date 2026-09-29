@@ -172,6 +172,27 @@ and it files a GitHub issue with what it found.
 -->
 
 ---
+layout: center
+class: text-center
+---
+
+<h1 class="rk-title">Your lab keys</h1>
+
+<RoomKeys />
+
+<div class="rk-hint">Scan it, and the <code>.env</code> blocks on the next slides fill themselves in.</div>
+
+<style>
+.rk-title { font-size: 2.6rem; margin-bottom: 1.4rem; }
+.rk-hint { margin-top: 1.2rem; font-size: 1rem; color: var(--ink-dim); }
+</style>
+
+<!--
+The QR and link only exist in your local copy (slides/local.json, gitignored).
+The deployed deck shows "ask for the link in the room" here.
+-->
+
+---
 
 # Before you start
 
@@ -192,8 +213,6 @@ and it files a GitHub issue with what it found.
 <div class="opt"><code>brew install jq glow</code> <span>(or your package manager)</span></div>
 
 <PrettyToggle class="mt-2" />
-
-<RoomKeys />
 
 </div>
 
