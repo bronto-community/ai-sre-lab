@@ -23,14 +23,14 @@ bronto = MCPClient(lambda: streamable_http_client(
 # #endregion
 
 model = BedrockModel(
-    model_id=os.environ.get("BEDROCK_MODEL_ID", "openai.gpt-oss-120b-1:0"),
-    region_name=os.environ.get("AWS_REGION", "eu-central-1"),
+    model_id=os.environ.get("BEDROCK_MODEL_ID", "us.anthropic.claude-haiku-4-5-20251001-v1:0"),
+    region_name=os.environ.get("AWS_REGION", "us-west-2"),
 )
 app = BedrockAgentCoreApp()
 
 
 def answer(result, reasoning: bool) -> str:
-    """gpt-oss sometimes writes its reasoning into the answer. Drop it unless asked."""
+    """Some models write their reasoning into the answer. Drop it unless asked."""
     text = str(result).strip()
     if reasoning or not text.startswith("<reasoning>"):
         return text

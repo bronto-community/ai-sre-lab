@@ -185,7 +185,7 @@ and it files a GitHub issue with what it found.
 
 <div class="n">Your <code>.env</code>, filled in as you go</div>
 
-<EnvBlock :fixed="{ AWS_REGION: '<region of your Bedrock key>', AWS_BEARER_TOKEN_BEDROCK: '<your Bedrock key, step 1>', BEDROCK_MODEL_ID: 'openai.gpt-oss-120b-1:0' }" :names="['BRONTO_API_KEY', 'GITHUB_TOKEN']" />
+<EnvBlock :fixed="{ AWS_REGION: '<region of your Bedrock key>', AWS_BEARER_TOKEN_BEDROCK: '<your Bedrock key, step 1>', BEDROCK_MODEL_ID: 'us.anthropic.claude-haiku-4-5-20251001-v1:0' }" :names="['BRONTO_API_KEY', 'GITHUB_TOKEN']" />
 
 <div class="n">Optional: nicer output</div>
 
@@ -242,17 +242,17 @@ Strands agent + AgentCore app: an HTTP endpoint around a model. Nothing else.
 
 <div class="n">1 · Get a Bedrock key</div>
 
-[Bedrock playground](https://console.aws.amazon.com/bedrock/home?#/playground) → **Select model** → **gpt-oss-120b** → **Apply** → **Build** → **Generate short-term API key**
+[Bedrock playground](https://console.aws.amazon.com/bedrock/home?#/playground) → **Select model** → **Claude Haiku 4.5** → **Apply** → **Build** → **Generate short-term API key**
 
 <div class="n">2 · Create a <code>.env</code> file with the key, its region and a model</div>
 
 ```ini
-AWS_REGION=eu-central-1
+AWS_REGION=us-west-2
 AWS_BEARER_TOKEN_BEDROCK=...
-BEDROCK_MODEL_ID=openai.gpt-oss-120b-1:0
+BEDROCK_MODEL_ID=us.anthropic.claude-haiku-4-5-20251001-v1:0
 ```
 
-<div class="hint">Any Bedrock model works. We use gpt-oss for now.</div>
+<div class="hint">Any Bedrock model with tool use works. We use Claude Haiku 4.5.</div>
 
 <div class="n">3 · Start the agent</div>
 
@@ -528,7 +528,7 @@ Same image, same model, different instructions. The prompt files are read at
 start-up, hence the restart.
 
 It may also fail outright: search results can exceed the model's context
-(gpt-oss: 131k tokens). Keep that for the DIY-limits discussion at the end.
+(Haiku 4.5: 200k tokens, Nova Lite: 300k). Keep that for the DIY-limits discussion at the end.
 -->
 
 ---
@@ -540,7 +540,7 @@ It may also fail outright: search results can exceed the model's context
 <div class="n">1 · Pick another model in <code>.env</code></div>
 
 ```ini
-BEDROCK_MODEL_ID=openai.gpt-oss-20b-1:0
+BEDROCK_MODEL_ID=us.amazon.nova-lite-v1:0
 ```
 
 <div class="hint">Any Bedrock model your account can use: Bedrock console → Model catalog.</div>
