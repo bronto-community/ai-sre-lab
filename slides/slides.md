@@ -185,7 +185,7 @@ and it files a GitHub issue with what it found.
 
 <div class="n">Your <code>.env</code>, filled in as you go</div>
 
-<EnvBlock :fixed="{ AWS_REGION: '<region of your Bedrock key>', AWS_BEARER_TOKEN_BEDROCK: '<your Bedrock key, step 1>', BEDROCK_MODEL_ID: 'us.anthropic.claude-haiku-4-5-20251001-v1:0' }" :names="['BRONTO_API_KEY', 'GITHUB_TOKEN']" />
+<EnvBlock :fixed="{ AWS_REGION: 'us-west-2', AWS_ACCESS_KEY_ID: '<from your lab account, step 1>', AWS_SECRET_ACCESS_KEY: '<…>', AWS_SESSION_TOKEN: '<…>', BEDROCK_MODEL_ID: 'us.anthropic.claude-haiku-4-5-20251001-v1:0' }" :names="['BRONTO_API_KEY', 'GITHUB_TOKEN']" />
 
 <div class="n">Optional: nicer output</div>
 
@@ -240,19 +240,21 @@ Strands agent + AgentCore app: an HTTP endpoint around a model. Nothing else.
 
 <div class="steps">
 
-<div class="n">1 · Get a Bedrock key</div>
+<div class="n">1 · Get your lab account's AWS credentials</div>
 
-[Bedrock playground](https://console.aws.amazon.com/bedrock/home?#/playground) → **Select model** → **Claude Haiku 4.5** → **Apply** → **Build** → **Generate short-term API key**
+Workshop Studio event page → **Get AWS CLI credentials** → the macOS / Linux lines
 
-<div class="n">2 · Create a <code>.env</code> file with the key, its region and a model</div>
+<div class="n">2 · Put them in <code>.env</code>, without the <code>export</code></div>
 
 ```ini
 AWS_REGION=us-west-2
-AWS_BEARER_TOKEN_BEDROCK=...
+AWS_ACCESS_KEY_ID=ASIA...
+AWS_SECRET_ACCESS_KEY=...
+AWS_SESSION_TOKEN=...
 BEDROCK_MODEL_ID=us.anthropic.claude-haiku-4-5-20251001-v1:0
 ```
 
-<div class="hint">Any Bedrock model with tool use works. We use Claude Haiku 4.5.</div>
+<div class="hint">At home: a Bedrock API key works too, as <code>AWS_BEARER_TOKEN_BEDROCK=…</code>.</div>
 
 <div class="n">3 · Start the agent</div>
 
@@ -262,7 +264,7 @@ docker run --rm -p 8080:8080 --env-file .env ghcr.io/bronto-community/ai-sre-age
 
 <div class="n">4 · Ask it something, from a second terminal</div>
 
-<Curl prompt="Who are you?" answer="I’m ChatGPT, an AI language model created by OpenAI ..." />
+<Curl prompt="Who are you?" answer="I’m Claude, an AI assistant made by Anthropic ..." />
 
 </div>
 
@@ -282,7 +284,7 @@ docker run --rm -p 8080:8080 --env-file .env ghcr.io/bronto-community/ai-sre-age
 A model behind an endpoint. No identity, no tools.
 Ctrl-C stops the agent.
 
-The key only works in the region it was generated in, and lasts at most 12h.
+Lab account credentials are temporary: if calls start failing with an expired token, fetch them again from the event page.
 -->
 
 ---
