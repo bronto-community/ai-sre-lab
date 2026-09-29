@@ -189,7 +189,9 @@ and it files a GitHub issue with what it found.
 
 <div class="n">Optional: nicer output</div>
 
-<div class="opt"><code>brew install jq glow</code> <span>(or your package manager), then</span> <PrettyToggle /></div>
+<div class="opt"><code>brew install jq glow</code> <span>(or your package manager)</span></div>
+
+<PrettyToggle class="mt-2" />
 
 </div>
 
