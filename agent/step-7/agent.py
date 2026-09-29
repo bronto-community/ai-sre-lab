@@ -34,7 +34,7 @@ github = MCPClient(lambda: streamable_http_client(
 
 model = BedrockModel(
     model_id=os.environ.get("BEDROCK_MODEL_ID", "us.anthropic.claude-haiku-4-5-20251001-v1:0"),
-    region_name=os.environ.get("AWS_REGION", "us-west-2"),
+    region_name=os.environ.get("AWS_REGION") or os.environ.get("AWS_DEFAULT_REGION", "us-west-2"),
 )
 app = BedrockAgentCoreApp()
 

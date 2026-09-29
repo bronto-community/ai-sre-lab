@@ -185,7 +185,7 @@ and it files a GitHub issue with what it found.
 
 <div class="n">Your <code>.env</code>, filled in as you go</div>
 
-<EnvBlock :fixed="{ AWS_REGION: 'us-west-2', AWS_ACCESS_KEY_ID: '<from your lab account, step 1>', AWS_SECRET_ACCESS_KEY: '<…>', AWS_SESSION_TOKEN: '<…>', BEDROCK_MODEL_ID: 'us.anthropic.claude-haiku-4-5-20251001-v1:0' }" :names="['BRONTO_API_KEY', 'GITHUB_TOKEN']" />
+<EnvBlock :fixed="{ AWS_DEFAULT_REGION: 'us-west-2', AWS_ACCESS_KEY_ID: '<from your lab account, step 1>', AWS_SECRET_ACCESS_KEY: '<…>', AWS_SESSION_TOKEN: '<…>', BEDROCK_MODEL_ID: 'us.anthropic.claude-haiku-4-5-20251001-v1:0' }" :names="['BRONTO_API_KEY', 'GITHUB_TOKEN']" />
 
 <div class="n">Optional: nicer output</div>
 
@@ -244,10 +244,10 @@ Strands agent + AgentCore app: an HTTP endpoint around a model. Nothing else.
 
 Workshop Studio event page → **Get AWS CLI credentials** → the macOS / Linux lines
 
-<div class="n">2 · Put them in <code>.env</code>, without the <code>export</code></div>
+<div class="n">2 · Put them in <code>.env</code>: drop <code>export</code> and the quotes</div>
 
 ```ini
-AWS_REGION=us-west-2
+AWS_DEFAULT_REGION=us-west-2
 AWS_ACCESS_KEY_ID=ASIA...
 AWS_SECRET_ACCESS_KEY=...
 AWS_SESSION_TOKEN=...
