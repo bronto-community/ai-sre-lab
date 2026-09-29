@@ -191,6 +191,8 @@ brew install jq glow        # or your package manager
 
 <PrettyToggle class="mt-4" />
 
+<div class="mt-4"><KeysStatus /></div>
+
 </div>
 
 <style>
@@ -384,9 +386,7 @@ logs, list datasets, run saved searches, summarise errors.
 
 <div class="n">1 · Add your Bronto key to <code>.env</code></div>
 
-```ini
-BRONTO_API_KEY=...
-```
+<EnvBlock :names="['BRONTO_API_KEY']" />
 
 <div class="n">2 · Stop step 2 (Ctrl-C), start step 3</div>
 
@@ -456,9 +456,7 @@ already looks. One issue per question, filed by the code, not the model.
 
 <div class="n">1 · Add your GitHub token to <code>.env</code></div>
 
-```ini
-GITHUB_TOKEN=...
-```
+<EnvBlock :names="['GITHUB_TOKEN']" />
 
 <div class="n">2 · Stop step 3 (Ctrl-C), start step 4</div>
 

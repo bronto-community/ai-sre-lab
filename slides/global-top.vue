@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useNav } from '@slidev/client'
+import './components/secrets'  // read the room's sealed link before any navigation drops it
 
 /**
  * Slidev disables every keyboard shortcut while a <button> or <a> holds focus:
