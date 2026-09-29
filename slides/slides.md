@@ -185,7 +185,7 @@ and it files a GitHub issue with what it found.
 
 <div class="n">Your <code>.env</code>, filled in as you go</div>
 
-<EnvBlock :fixed="{ AWS_DEFAULT_REGION: 'us-west-2', AWS_ACCESS_KEY_ID: '<from your lab account, step 1>', AWS_SECRET_ACCESS_KEY: '<…>', AWS_SESSION_TOKEN: '<…>', BEDROCK_MODEL_ID: 'us.anthropic.claude-haiku-4-5-20251001-v1:0' }" :names="['BRONTO_API_KEY', 'GITHUB_TOKEN']" />
+<EnvBlock class="env-sm" :fixed="{ AWS_DEFAULT_REGION: 'us-west-2', AWS_ACCESS_KEY_ID: '<step 1>', AWS_SECRET_ACCESS_KEY: '<step 1>', AWS_SESSION_TOKEN: '<step 1>' }" :names="['BRONTO_API_KEY', 'GITHUB_TOKEN']" />
 
 <div class="n">Optional: nicer output</div>
 
@@ -204,6 +204,7 @@ and it files a GitHub issue with what it found.
 .steps .n:first-child { margin-top: 0.4rem; }
 .steps li { font-size: 1.05rem; }
 .steps .n code { font-size: 1em; text-transform: none; }
+.env-sm { font-size: 0.7em; line-height: 1.4; }
 .opt { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
 .opt span { color: var(--ink-dim); }
 </style>
