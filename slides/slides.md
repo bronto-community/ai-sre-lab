@@ -174,6 +174,7 @@ and it files a GitHub issue with what it found.
 ---
 layout: center
 class: text-center
+hide: true
 ---
 
 <h1 class="rk-title">Your lab keys</h1>
