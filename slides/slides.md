@@ -756,6 +756,7 @@ class: text-center
       </div>
       <QrCode url="https://ote.li/ai-sre-lab" :size="110" />
     </div>
+    <a class="next-link" href="https://ai-observatory-lab.vercel.app/cleanup" target="_top">Done? Clean up your keys and agents →</a>
   </div>
 
   <ThanksBronto>What would <em>your</em> agent get wrong?</ThanksBronto>
@@ -769,5 +770,10 @@ class: text-center
 .tl-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-dim); }
 .thanks em { font-style: italic; color: var(--sapphire); }
 .thanks .tl-url { white-space: nowrap; }
+/* target=_top: inside the self-paced site's embedded deck, it moves the whole page on */
+.next-link {
+  display: inline-block; margin-top: 1.6rem; padding: 0.55rem 1rem; border-radius: 10px;
+  background: var(--sapphire); color: #fff !important; font-weight: 700; text-decoration: none !important;
+}
 </style>
 
