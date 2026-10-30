@@ -34,7 +34,8 @@ jobs:
           HOST: ${{ vars.INSTANCE_ID }}
           CMD: >-
             mkdir -p /opt/storefront && cd /opt/storefront && touch .env &&
-            { grep -v '^BRONTO_API_KEY=' .env || true; echo "BRONTO_API_KEY=${{ secrets.BRONTO_INGEST_KEY }}"; } > .env.new && mv .env.new .env && chmod 600 .env &&
+            { grep -vE '^(BRONTO_API_KEY|BRONTO_MIRROR_API_KEY|COMPOSE_FILE)=' .env || true; echo "BRONTO_API_KEY=${{ secrets.BRONTO_INGEST_KEY }}";
+            if [ -n "${{ secrets.BRONTO_MIRROR_INGEST_KEY }}" ]; then echo "BRONTO_MIRROR_API_KEY=${{ secrets.BRONTO_MIRROR_INGEST_KEY }}"; echo "COMPOSE_FILE=docker-compose.yml:docker-compose.mirror.yml"; fi; } > .env.new && mv .env.new .env && chmod 600 .env &&
             aws s3 cp s3://${{ vars.HARNESS_BUCKET }}/demo.tgz /tmp/demo.tgz &&
             tar -xzf /tmp/demo.tgz && chmod +x deploy.sh setup-host.sh && ./setup-host.sh &&
             if [ -s .deploy-state ]; then ./deploy.sh $(sed -n 's/^GIT_COMMIT=//p' .deploy-state) &&
