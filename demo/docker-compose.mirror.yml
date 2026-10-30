@@ -1,0 +1,13 @@
+# Turns on collector.mirror.yaml. Enable it with two lines in .env:
+#
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.mirror.yml
+#   BRONTO_MIRROR_API_KEY=<ingestion key of the second org>
+#
+# The harness workflow writes both when the BRONTO_MIRROR_INGEST_KEY secret is set.
+
+services:
+  collector:
+    command: ["--config=/etc/collector.yaml", "--config=/etc/collector.mirror.yaml"]
+    volumes: ["./collector.mirror.yaml:/etc/collector.mirror.yaml:ro"]
+    environment:
+      BRONTO_MIRROR_API_KEY: ${BRONTO_MIRROR_API_KEY:?set BRONTO_MIRROR_API_KEY in .env}

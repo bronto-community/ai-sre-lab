@@ -39,6 +39,12 @@ To ship it somewhere real, uncomment the `otlp/backend` exporter in `collector.y
 it to the pipelines, and put the endpoint and headers in `.env`. Swapping backends is that
 file and nothing else.
 
+To send everything to a second Bronto org as well, add two lines to `.env`:
+`COMPOSE_FILE=docker-compose.yml:docker-compose.mirror.yml` and
+`BRONTO_MIRROR_API_KEY=<key>`. That loads `collector.mirror.yaml` on top of
+`collector.yaml`. On the shop host, the harness workflow does this when the
+`BRONTO_MIRROR_INGEST_KEY` secret is set, and undoes it when the secret is removed.
+
 ## Layout
 
 | Path | What |

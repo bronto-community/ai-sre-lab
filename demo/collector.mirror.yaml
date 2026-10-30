@@ -1,0 +1,21 @@
+# Optional: send everything to a second Bronto org as well, e.g. one shared with
+# a partner. Loaded after collector.yaml, which it extends: maps merge, lists
+# are replaced, so each pipeline lists all of its exporters again.
+#
+# Off by default. docker-compose.mirror.yml turns it on; see README.md.
+
+exporters:
+  otlphttp/mirror:
+    endpoint: https://ingestion.eu.bronto.io
+    compression: none
+    headers:
+      x-bronto-api-key: ${env:BRONTO_MIRROR_API_KEY}
+
+service:
+  pipelines:
+    traces:
+      exporters: [debug, otlphttp/bronto, otlphttp/mirror]
+    metrics:
+      exporters: [debug, otlphttp/bronto, otlphttp/mirror]
+    logs:
+      exporters: [debug, otlphttp/bronto, otlphttp/mirror]
