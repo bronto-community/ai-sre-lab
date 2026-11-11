@@ -45,6 +45,15 @@ To send everything to a second Bronto org as well, add two lines to `.env`:
 `collector.yaml`. On the shop host, the harness workflow does this when the
 `BRONTO_MIRROR_INGEST_KEY` secret is set, and undoes it when the secret is removed.
 
+To send traces to [Checkly](https://www.checklyhq.com/docs/traces-open-telemetry/) as well,
+add `docker-compose.checkly.yml` to `COMPOSE_FILE` and set `CHECKLY_OTEL_API_KEY=<key>`
+(eu-west-1 endpoint, over gRPC). That loads
+`collector.checkly.yaml`, a separate traces pipeline that forwards only the traces
+Checkly's own checks started. It stacks with the mirror:
+`COMPOSE_FILE=docker-compose.yml:docker-compose.mirror.yml:docker-compose.checkly.yml`.
+On the shop host, the harness workflow does this when the `CHECKLY_OTEL_API_KEY`
+secret is set.
+
 ## Layout
 
 | Path | What |

@@ -1,0 +1,27 @@
+# Optional: send traces to Checkly as well, so check results link to the
+# backend traces they caused. It runs as a separate pipeline, so it adds to
+# whatever else is on (Bronto, the mirror) and doesn't replace it.
+#
+# Off by default. docker-compose.checkly.yml turns it on; see README.md.
+
+processors:
+  # Checkly only needs the traces its own checks started. Those carry
+  # checkly=true in the W3C tracestate; everything else gets dropped here.
+  filter/checkly:
+    error_mode: ignore
+    traces:
+      span:
+        - 'trace_state["checkly"] != "true"'
+
+exporters:
+  otlp/checkly:
+    endpoint: "otel.eu-west-1.checklyhq.com:4317"
+    headers:
+      authorization: "${env:CHECKLY_OTEL_API_KEY}"
+
+service:
+  pipelines:
+    traces/checkly:
+      receivers: [otlp]
+      processors: [filter/checkly, batch]
+      exporters: [otlp/checkly]

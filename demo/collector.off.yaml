@@ -1,0 +1,4 @@
+# Empty placeholder. docker-compose.yml mounts it in each optional config slot
+# (collector.mirror.yaml, collector.checkly.yaml) until an overlay mounts the
+# real file there instead. That way the overlays stack.
+{}

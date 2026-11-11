@@ -27,8 +27,16 @@ services:
     image: otel/opentelemetry-collector-contrib:0.148.0
     restart: unless-stopped
     logging: *logging
-    command: ["--config=/etc/collector.yaml"]
-    volumes: ["./collector.yaml:/etc/collector.yaml:ro"]
+    # The extra slots stay empty (collector.off.yaml) unless an overlay fills
+    # them: docker-compose.mirror.yml, docker-compose.checkly.yml.
+    command:
+      - --config=/etc/collector.yaml
+      - --config=/etc/collector.mirror.yaml
+      - --config=/etc/collector.checkly.yaml
+    volumes:
+      - ./collector.yaml:/etc/collector.yaml:ro
+      - ./collector.off.yaml:/etc/collector.mirror.yaml:ro
+      - ./collector.off.yaml:/etc/collector.checkly.yaml:ro
     environment:
       BRONTO_API_KEY: ${BRONTO_API_KEY:?set BRONTO_API_KEY in .env}
 

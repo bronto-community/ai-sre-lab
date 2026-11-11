@@ -1,0 +1,13 @@
+# Turns on collector.checkly.yaml. Enable it with two lines in .env:
+#
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.checkly.yml
+#   CHECKLY_OTEL_API_KEY=<Checkly OTel API key>
+#
+# It stacks with the mirror: COMPOSE_FILE=docker-compose.yml:docker-compose.mirror.yml:docker-compose.checkly.yml
+# The harness workflow writes all of this when the CHECKLY_OTEL_API_KEY secret is set.
+
+services:
+  collector:
+    volumes: ["./collector.checkly.yaml:/etc/collector.checkly.yaml:ro"]
+    environment:
+      CHECKLY_OTEL_API_KEY: ${CHECKLY_OTEL_API_KEY:?set CHECKLY_OTEL_API_KEY in .env}
